@@ -1,14 +1,455 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لوحة المدير - الدخلّ</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
-
 <body>
-  
-</body>
+    <!-- الهيدر -->
+    <header class="app-header">
+        <h1>الدخلّ</h1>
+    </header>
 
+    <!-- المحتوى الرئيسي -->
+    <main class="dashboard-content" id="dashboardContent">
+        <!-- الصفحة الرئيسية (الافتراضية) -->
+        <section class="page active" id="page-home">
+            <!-- زر فاتورة جديدة -->
+            <button class="btn btn-primary btn-full btn-lg mb-20" id="newInvoiceBtn">
+                <span>🧾</span> فاتورة جديدة
+            </button>
+
+            <!-- المربعات الأربعة -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">ايرادات اليوم</div>
+                    <div class="stat-value" id="todayRevenue">0 <span class="stat-currency">دينار</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">ايرادات الشهر الحالي</div>
+                    <div class="stat-value" id="monthRevenue">0 <span class="stat-currency">دينار</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">مصروفات الشهر الحالي</div>
+                    <div class="stat-value" id="monthExpenses">0 <span class="stat-currency">دينار</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">عدد العمال</div>
+                    <div class="stat-value" id="workersCount">0 <span class="stat-currency" id="workersLabel">عمال</span></div>
+                </div>
+            </div>
+
+            <!-- أزرار إضافية -->
+            <div class="action-buttons">
+                <button class="btn btn-primary btn-full" id="recentInvoicesBtn">
+                    <span>📋</span> أحدث الفواتير
+                </button>
+                <button class="btn btn-primary btn-full" id="statisticsBtn">
+                    <span>📊</span> الاحصائيات
+                </button>
+            </div>
+        </section>
+
+        <!-- صفحة فاتورة جديدة -->
+        <section class="page" id="page-invoice">
+            <button class="btn btn-outline btn-sm" id="backFromInvoice">
+                <span>←</span> عودة
+            </button>
+
+            <div class="invoice-container">
+                <div class="invoice-header">
+                    <button class="btn btn-primary btn-sm" id="addProductBtn">
+                        <span>➕</span> اضافة منتج
+                    </button>
+                </div>
+
+                <div class="invoice-items-wrapper">
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المنتج</th>
+                                <th>الكمية</th>
+                                <th>سعر المفرد</th>
+                                <th>المبلغ الكلي</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceItemsBody">
+                            <!-- تظهر المنتجات هنا -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="invoice-footer">
+                    <div class="invoice-date" id="invoiceDate">
+                        التاريخ: <span id="currentDate">--/--/---- --:--</span>
+                    </div>
+                    
+                    <div class="invoice-actions">
+                        <button class="btn btn-success" id="saveInvoiceImage">
+                            <span>🖼️</span> حفظ كصورة
+                        </button>
+                        <button class="btn btn-primary" id="printInvoice">
+                            <span>🖨️</span> طباعة
+                        </button>
+                        <button class="btn btn-success" id="saveInvoice">
+                            <span>💾</span> حفظ الفاتورة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- صفحة أحدث الفواتير -->
+        <section class="page" id="page-recent">
+            <h2 class="page-title">أحدث الفواتير</h2>
+            <div id="invoicesList" class="invoices-list">
+                <!-- تظهر الفواتير هنا -->
+            </div>
+        </section>
+
+        <!-- صفحة الاحصائيات -->
+        <section class="page" id="page-statistics">
+            <h2 class="page-title">الاحصائيات</h2>
+            <button class="btn btn-primary btn-full" id="selectPeriodBtn">
+                <span>📅</span> تحديد المدة
+            </button>
+            <div id="statisticsContent" class="mt-20">
+                <!-- تظهر الاحصائيات هنا -->
+            </div>
+        </section>
+
+        <!-- صفحة الحاسبة الذكية -->
+        <section class="page" id="page-calculator">
+            <h2 class="page-title">الحاسبة الذكية</h2>
+            <div class="calculator-container">
+                <div class="currency-grid" id="currencyGrid">
+                    <!-- تظهر صور العملات هنا -->
+                </div>
+                
+                <div class="form-group mt-20">
+                    <label>مبلغ الفاتورة الكلي</label>
+                    <input type="number" id="invoiceTotal" class="form-control" placeholder="أدخل مبلغ الفاتورة">
+                </div>
+                
+                <button class="btn btn-primary btn-full" id="calculateBtn">
+                    <span>🧮</span> حساب الباقي
+                </button>
+                
+                <button class="btn btn-outline btn-full mt-10" id="resetCalculator">
+                    <span>🔄</span> إعادة تعيين
+                </button>
+            </div>
+        </section>
+
+        <!-- صفحة الديون -->
+        <section class="page" id="page-debts">
+            <h2 class="page-title">الديون</h2>
+            
+            <div class="debts-header">
+                <input type="text" id="debtSearch" class="form-control" placeholder="🔍 بحث عن شخص...">
+                <button class="btn btn-primary" id="newDebtBtn">
+                    <span>➕</span> جديد
+                </button>
+            </div>
+            
+            <div id="debtsList" class="debts-list">
+                <!-- تظهر الديون هنا -->
+            </div>
+        </section>
+
+        <!-- صفحة المصروفات -->
+        <section class="page" id="page-expenses">
+            <h2 class="page-title">المصروفات</h2>
+            
+            <button class="btn btn-primary btn-full" id="newExpenseBtn">
+                <span>➕</span> اضافة جديد
+            </button>
+            
+            <div id="expensesList" class="expenses-list mt-20">
+                <!-- تظهر المصروفات هنا -->
+            </div>
+        </section>
+
+        <!-- صفحة الاعدادات -->
+        <section class="page" id="page-settings">
+            <h2 class="page-title">الاعدادات</h2>
+            
+            <div class="settings-group">
+                <label class="settings-label">اللغة</label>
+                <div class="settings-options">
+                    <button class="btn btn-outline btn-sm active" data-lang="ar">العربية</button>
+                    <button class="btn btn-outline btn-sm" data-lang="en">English</button>
+                    <button class="btn btn-outline btn-sm" data-lang="ku">كردی</button>
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">الوضع</label>
+                <div class="settings-options">
+                    <button class="btn btn-outline btn-sm active" data-theme="light">فاتح</button>
+                    <button class="btn btn-outline btn-sm" data-theme="dark">داكن</button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary btn-full mt-20" id="productsBtn">
+                <span>📦</span> المخزن
+            </button>
+            
+            <button class="btn btn-primary btn-full mt-10" id="workersBtn">
+                <span>👥</span> العمال
+            </button>
+            
+            <button class="btn btn-primary btn-full mt-10" id="supportBtn">
+                <span>🆘</span> الدعم الفني
+            </button>
+            
+            <button class="btn btn-danger btn-full mt-20" id="logoutBtn">
+                <span>🚪</span> تسجيل الخروج
+            </button>
+        </section>
+    </main>
+
+    <!-- النافبار السفلي -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-page="page-calculator">
+            <img src="../assets/icons/calculator.svg" alt="حاسبة">
+            <span class="nav-label">حاسبة</span>
+        </button>
+        <button class="nav-item" data-page="page-debts">
+            <img src="../assets/icons/debts.svg" alt="ديون">
+            <span class="nav-label">ديون</span>
+        </button>
+        <button class="nav-item" data-page="page-home">
+            <img src="../assets/icons/home.svg" alt="الرئيسية">
+            <span class="nav-label">الرئيسية</span>
+        </button>
+        <button class="nav-item" data-page="page-expenses">
+            <img src="../assets/icons/expenses.svg" alt="مصروفات">
+            <span class="nav-label">مصروفات</span>
+        </button>
+        <button class="nav-item" data-page="page-settings">
+            <img src="../assets/icons/settings.svg" alt="اعدادات">
+            <span class="nav-label">اعدادات</span>
+        </button>
+    </nav>
+
+    <!-- جميع النوافذ المنبثقة -->
+    <!-- نافذة المنتج -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" id="productModalClose">✕</button>
+            <h3 id="productModalTitle">المنتج</h3>
+            <form id="productForm">
+                <div class="form-group">
+                    <label>المنتج</label>
+                    <div class="product-input-group">
+                        <input type="text" id="productName" class="form-control" placeholder="اسم المنتج">
+                        <button type="button" class="btn btn-primary btn-sm" id="scanBarcodeBtn">📷</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <input type="number" id="productQuantity" class="form-control" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>سعر المفرد</label>
+                    <input type="number" id="productPrice" class="form-control" placeholder="السعر" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ الكلي</label>
+                    <input type="number" id="productTotal" class="form-control" readonly>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" id="deleteProductBtn">🗑️ حذف</button>
+                    <button type="submit" class="btn btn-success">💾 حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة اختيار منتج -->
+    <div class="modal-overlay" id="productSelectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="productSelectClose">✕</button>
+            <h3>اختر منتج</h3>
+            <div class="form-group">
+                <input type="text" id="productSearch" class="form-control" placeholder="🔍 ابحث عن منتج...">
+            </div>
+            <div id="productSelectList" class="product-select-list">
+                <!-- تظهر المنتجات هنا -->
+            </div>
+            <button class="btn btn-primary btn-full mt-10" id="newProductFromSelect">➕ منتج غير موجود</button>
+        </div>
+    </div>
+
+    <!-- نافذة اختيار المدة للاحصائيات -->
+    <div class="modal-overlay" id="periodModal">
+        <div class="modal-content">
+            <button class="modal-close" id="periodModalClose">✕</button>
+            <h3>تحديد المدة</h3>
+            <div class="period-options">
+                <button class="btn btn-outline btn-full" data-period="today">اليوم</button>
+                <button class="btn btn-outline btn-full" data-period="month">الشهر الحالي</button>
+                <button class="btn btn-outline btn-full" data-period="year">السنة الحالية</button>
+                <button class="btn btn-outline btn-full" data-period="custom">فترة محددة</button>
+            </div>
+            <div id="customPeriodFields" style="display: none;">
+                <div class="form-group">
+                    <label>من تاريخ</label>
+                    <input type="date" id="periodFrom" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>الى تاريخ</label>
+                    <input type="date" id="periodTo" class="form-control">
+                </div>
+            </div>
+            <button class="btn btn-success btn-full mt-20" id="downloadReportBtn">📥 تحميل الملف</button>
+        </div>
+    </div>
+
+    <!-- نافذة الدين -->
+    <div class="modal-overlay" id="debtModal">
+        <div class="modal-content">
+            <button class="modal-close" id="debtModalClose">✕</button>
+            <h3 id="debtModalTitle">دين جديد</h3>
+            <form id="debtForm">
+                <div class="form-group">
+                    <label>اسم الشخص</label>
+                    <input type="text" id="debtPersonName" class="form-control" placeholder="اسم الشخص">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="debtAmount" class="form-control" placeholder="المبلغ" step="0.01">
+                </div>
+                <button type="submit" class="btn btn-success btn-full">💾 حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة حركة الدين -->
+    <div class="modal-overlay" id="debtTransactionModal">
+        <div class="modal-content">
+            <button class="modal-close" id="debtTransactionClose">✕</button>
+            <h3 id="debtTransactionTitle">حركة دين</h3>
+            <form id="debtTransactionForm">
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="debtTransactionAmount" class="form-control" placeholder="المبلغ" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>ملاحظات</label>
+                    <input type="text" id="debtTransactionNotes" class="form-control" placeholder="ملاحظات (اختياري)">
+                </div>
+                <button type="submit" class="btn btn-success btn-full">💾 حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة المصروف -->
+    <div class="modal-overlay" id="expenseModal">
+        <div class="modal-content">
+            <button class="modal-close" id="expenseModalClose">✕</button>
+            <h3 id="expenseModalTitle">مصروف جديد</h3>
+            <form id="expenseForm">
+                <div class="form-group">
+                    <label>اسم المصروف</label>
+                    <input type="text" id="expenseName" class="form-control" placeholder="اسم المصروف">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="expenseAmount" class="form-control" placeholder="المبلغ" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>مدة الالتزام</label>
+                    <select id="expenseFrequency" class="form-control">
+                        <option value="daily">يوميا</option>
+                        <option value="monthly">شهريا</option>
+                        <option value="yearly">سنويا</option>
+                        <option value="custom">مدة محددة</option>
+                    </select>
+                </div>
+                <div id="customDateFields" style="display: none;">
+                    <div class="form-group">
+                        <label>من تاريخ</label>
+                        <input type="date" id="expenseStartDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>الى تاريخ</label>
+                        <input type="date" id="expenseEndDate" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success btn-full">💾 حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة العامل -->
+    <div class="modal-overlay" id="workerModal">
+        <div class="modal-content">
+            <button class="modal-close" id="workerModalClose">✕</button>
+            <h3>عامل جديد</h3>
+            <form id="workerForm">
+                <div class="form-group">
+                    <label>اسم العامل</label>
+                    <input type="text" id="workerName" class="form-control" placeholder="اسم العامل">
+                </div>
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="workerUsername" class="form-control" placeholder="اسم المستخدم">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="workerPassword" class="form-control" placeholder="كلمة المرور">
+                </div>
+                <button type="submit" class="btn btn-success btn-full">👤 انشاء الحساب</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة المنتج في المخزن -->
+    <div class="modal-overlay" id="productInventoryModal">
+        <div class="modal-content">
+            <button class="modal-close" id="productInventoryClose">✕</button>
+            <h3>اضافة منتج للمخزن</h3>
+            <form id="productInventoryForm">
+                <div class="form-group">
+                    <label>شريط الرموز</label>
+                    <div class="barcode-input-group">
+                        <input type="text" id="productBarcode" class="form-control" placeholder="مسح أو كتابة الباركود">
+                        <button type="button" class="btn btn-primary btn-sm" id="scanBarcodeInventoryBtn">📷</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <input type="text" id="productInventoryName" class="form-control" placeholder="اسم المنتج">
+                </div>
+                <div class="form-group">
+                    <label>سعر المفرد</label>
+                    <input type="number" id="productInventoryPrice" class="form-control" placeholder="السعر" step="0.01">
+                </div>
+                <button type="submit" class="btn btn-success btn-full">💾 حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة النتيجة للحاسبة -->
+    <div class="modal-overlay" id="calculatorResultModal">
+        <div class="modal-content">
+            <button class="modal-close" id="calculatorResultClose">✕</button>
+            <h3>المبلغ المتبقي</h3>
+            <div class="result-amount" id="resultAmount">0 دينار</div>
+            <div class="result-currency-images" id="resultCurrencyImages">
+                <!-- تظهر صور العملات هنا -->
+            </div>
+            <button class="btn btn-primary btn-full mt-20" id="calculatorResultDone">✅ تم</button>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
 </html>
