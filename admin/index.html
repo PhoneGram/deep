@@ -1,14 +1,496 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لوحة المشرف - الدخلّ</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* ===== تنسيقات لوحة المشرف ===== */
+        .admin-page {
+            min-height: 100vh;
+            background: var(--secondary);
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .admin-header p {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* صفحة تسجيل الدخول */
+        .admin-login {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        [data-theme="dark"] .admin-login {
+            background: #2a2a2a;
+        }
+
+        .admin-login .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-login .logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            padding: 15px;
+        }
+
+        .admin-login h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .admin-login .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        /* لوحة التحكم */
+        .admin-dashboard {
+            display: none;
+        }
+
+        .admin-dashboard.active {
+            display: block;
+        }
+
+        .admin-login.active {
+            display: none;
+        }
+
+        /* أزرار الإدارة */
+        .admin-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-action-btn {
+            padding: 25px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            box-shadow: var(--shadow);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .admin-action-btn {
+            background: #2a2a2a;
+        }
+
+        .admin-action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .admin-action-btn .icon {
+            font-size: 40px;
+        }
+
+        .admin-action-btn.primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .admin-action-btn.danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* قائمة الحسابات */
+        .accounts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-right: 5px solid var(--primary-light);
+        }
+
+        [data-theme="dark"] .account-card {
+            background: #2a2a2a;
+        }
+
+        .account-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .account-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .account-card .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .account-card .status {
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .account-card .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .account-card .status.expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        [data-theme="dark"] .account-card .status.active {
+            background: #1e3a2a;
+            color: #8fdf9a;
+        }
+
+        [data-theme="dark"] .account-card .status.expired {
+            background: #3a1e1e;
+            color: #f5a0a8;
+        }
+
+        .account-card .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .account-card .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .account-card .actions .btn {
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+
+        /* قائمة العمال */
+        .workers-list {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        [data-theme="dark"] .workers-list {
+            border-top-color: #444;
+        }
+
+        .worker-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        [data-theme="dark"] .worker-item {
+            border-bottom-color: #333;
+        }
+
+        .worker-item:last-child {
+            border-bottom: none;
+        }
+
+        /* نموذج توليد حساب */
+        .generate-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        [data-theme="dark"] .generate-form {
+            background: #2a2a2a;
+        }
+
+        .generate-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .account-card .details {
+                grid-template-columns: 1fr;
+            }
+            
+            .generate-form .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-login {
+                padding: 25px 20px;
+                margin: 30px 10px;
+            }
+        }
+
+        /* نافذة تجديد الباقة */
+        .renew-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .renew-options .btn {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .renew-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* مؤشر التحميل */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* زر العودة */
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: rgba(0,0,0,0.05);
+        }
+    </style>
 </head>
-
 <body>
-  
-</body>
+    <div class="admin-page">
+        <div class="admin-container">
+            <!-- ===== صفحة تسجيل الدخول ===== -->
+            <div class="admin-login active" id="adminLogin">
+                <div class="logo">
+                    <img src="../assets/logo.png" alt="الدخلّ">
+                </div>
+                <h2>لوحة المشرف</h2>
+                <p class="subtitle">أدخل كلمة المرور للوصول إلى لوحة التحكم</p>
+                
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminPassword">كلمة المرور</label>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full btn-lg">
+                        <span>🔑</span> دخول
+                    </button>
+                    <div id="adminLoginError" class="login-error" style="display: none; margin-top: 15px;">
+                        ⚠️ <span id="adminErrorMessage">كلمة المرور غير صحيحة</span>
+                    </div>
+                </form>
+            </div>
 
+            <!-- ===== لوحة التحكم ===== -->
+            <div class="admin-dashboard" id="adminDashboard">
+                <!-- الهيدر -->
+                <div class="admin-header">
+                    <h1>🛠️ لوحة المشرف</h1>
+                    <p>إدارة الحسابات والمستخدمين</p>
+                </div>
+
+                <!-- أزرار الإجراءات -->
+                <div class="admin-actions">
+                    <button class="admin-action-btn primary" id="viewAccountsBtn">
+                        <span class="icon">👥</span>
+                        الحسابات
+                    </button>
+                    <button class="admin-action-btn" id="generateAccountBtn">
+                        <span class="icon">➕</span>
+                        توليد حساب جديد
+                    </button>
+                </div>
+
+                <!-- قسم الحسابات -->
+                <div id="accountsSection" style="display: none;">
+                    <div class="flex-between mb-20">
+                        <h3>📋 قائمة الحسابات</h3>
+                        <button class="btn btn-outline btn-sm" id="hideAccountsBtn">✕ إخفاء</button>
+                    </div>
+                    <div id="accountsList" class="accounts-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            جاري تحميل الحسابات...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم توليد حساب -->
+                <div id="generateSection" style="display: none;">
+                    <div class="flex-between mb-20">
+                        <h3>➕ توليد حساب جديد</h3>
+                        <button class="btn btn-outline btn-sm" id="hideGenerateBtn">✕ إخفاء</button>
+                    </div>
+                    <div class="generate-form">
+                        <form id="generateAccountForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>الاسم</label>
+                                    <input type="text" id="genName" class="form-control" placeholder="الاسم الكامل" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>اسم المستخدم</label>
+                                    <input type="text" id="genUsername" class="form-control" placeholder="اسم المستخدم" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور</label>
+                                <input type="text" id="genPassword" class="form-control" placeholder="كلمة المرور" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-full">
+                                <span>✅</span> إنشاء الحساب
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== نافذة تفاصيل الحساب ===== -->
+    <div class="modal-overlay" id="accountDetailsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="accountDetailsClose">✕</button>
+            <h3 id="accountDetailsName">اسم المدير</h3>
+            <div class="account-details-info" style="margin: 15px 0;">
+                <p><strong>اسم المستخدم:</strong> <span id="detailUsername">-</span></p>
+                <p><strong>كلمة المرور:</strong> <span id="detailPassword">-</span></p>
+                <p><strong>الحالة:</strong> <span id="detailStatus">-</span></p>
+                <p><strong>تاريخ انتهاء الباقة:</strong> <span id="detailExpiry">-</span></p>
+            </div>
+            <div class="account-details-actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="downloadQrBtn">
+                    <span>📱</span> تحميل كود QR
+                </button>
+                <button class="btn btn-success" id="renewPackageBtn">
+                    <span>🔄</span> تفعيل الباقة
+                </button>
+                <button class="btn btn-outline" id="viewWorkersBtn">
+                    <span>👥</span> عرض العمال
+                </button>
+            </div>
+            <div id="workersListContainer" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <h4>👥 عمال هذا المتجر</h4>
+                <div id="workersListDetails" class="workers-list">
+                    <!-- تظهر العمال هنا -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== نافذة تجديد الباقة ===== -->
+    <div class="modal-overlay" id="renewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="renewModalClose">✕</button>
+            <h3>🔄 تفعيل الباقة</h3>
+            <p class="text-muted mb-20">اختر المدة التي تريد تجديد الباقة لها</p>
+            <div class="renew-options" id="renewOptions">
+                <button class="btn btn-outline" data-months="1">شهر</button>
+                <button class="btn btn-outline" data-months="2">شهرين</button>
+                <button class="btn btn-outline" data-months="3">3 أشهر</button>
+                <button class="btn btn-outline" data-months="6">6 أشهر</button>
+                <button class="btn btn-outline" data-months="12">سنة</button>
+                <button class="btn btn-outline" data-months="24">سنتين</button>
+                <button class="btn btn-outline" data-months="36">3 سنوات</button>
+            </div>
+            <button class="btn btn-danger btn-full mt-20" id="cancelRenewBtn">إلغاء</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/app.js"></script>
+    <script src="admin.js"></script>
+</body>
 </html>
