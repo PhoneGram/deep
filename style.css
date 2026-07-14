@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1a472a 0%, #2D7D46 50%, #3a9b5a 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.install-page {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    padding: 50px 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #2D7D46;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(45, 125, 70, 0.3);
+}
+
+.app-name {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a472a;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.install-btn {
+    background: linear-gradient(135deg, #2D7D46, #1a472a);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 22px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(45, 125, 70, 0.4);
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+.install-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(45, 125, 70, 0.5);
+    background: linear-gradient(135deg, #3a9b5a, #2D7D46);
+}
+
+.install-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .logo {
+        width: 100px;
+        height: 100px;
+    }
+    .app-name {
+        font-size: 36px;
+    }
+    .install-btn {
+        font-size: 18px;
+        padding: 15px 30px;
+    }
+}
