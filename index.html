@@ -2,20 +2,127 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>الدخلّ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدخلّ - تثبيت التطبيق</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <meta name="theme-color" content="#2D7D46">
+    <meta name="theme-color" content="#1a472a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="assets/logo.png">
 </head>
 <body>
-    <div class="install-page">
-        <div class="logo-container">
-            <img src="logo.png" alt="الدخلّ" class="logo" id="logoImage">
-            <h1 class="app-name">الدخلّ</h1>
-            <button id="installBtn" class="install-btn">📱 تثبيت التطبيق</button>
+    <!-- صفحة التثبيت فقط -->
+    <div class="install-page" id="installPage">
+        <div class="install-container">
+            <!-- الشعار -->
+            <div class="logo-wrapper">
+                <img src="assets/logo.png" alt="الدخلّ" class="main-logo" id="mainLogo">
+            </div>
+            
+            <!-- اسم التطبيق -->
+            <h1 class="app-title">الدخلّ</h1>
+            <p class="app-subtitle">نظام كاشير سحابي متكامل</p>
+            
+            <!-- زر التثبيت -->
+            <button id="installBtn" class="install-btn">
+                <span class="btn-icon">📱</span>
+                تثبيت التطبيق
+            </button>
+            
+            <!-- رسالة للمتصفحات غير المدعومة -->
+            <p class="browser-support" id="browserSupport">
+                🔒 يعمل على جميع المتصفحات الحديثة
+            </p>
         </div>
     </div>
-    <script src="install.js"></script>
+
+    <!-- منع الوصول لأي شيء آخر -->
+    <script>
+        // منع محاولة الوصول لصفحات أخرى من المتصفح
+        (function() {
+            // التحقق من أن المستخدم في الصفحة الصحيحة
+            const currentPath = window.location.pathname;
+            const isInstallPage = currentPath === '/' || 
+                                 currentPath === '/index.html' || 
+                                 currentPath === '' ||
+                                 currentPath.endsWith('supermarket-cashier/');
+            
+            if (!isInstallPage) {
+                window.location.href = '/';
+                return;
+            }
+
+            // منع النقر بزر الماوس الأيمن
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // منع اختصار F12 وأدوات المطور
+            document.addEventListener('keydown', function(e) {
+                // F12
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+I
+                if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+J
+                if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+U (عرض المصدر)
+                if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+C (عناصر الفحص)
+                if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // منع السحب والإفلات
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // منع تحديد النص
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // التأكد من عدم وجود أي محاولة للدخول لصفحات أخرى عن طريق الـ hash
+            window.addEventListener('hashchange', function() {
+                if (window.location.hash) {
+                    window.location.hash = '';
+                }
+            });
+
+            // حماية إضافية: إذا حاول المستخدم تغيير الـ URL
+            let lastPath = window.location.pathname;
+            setInterval(function() {
+                if (window.location.pathname !== lastPath) {
+                    const current = window.location.pathname;
+                    const allowed = ['/', '/index.html', ''];
+                    if (!allowed.includes(current) && !current.endsWith('supermarket-cashier/')) {
+                        window.location.href = '/';
+                    }
+                    lastPath = window.location.pathname;
+                }
+            }, 500);
+        })();
+    </script>
+
+    <!-- كود التثبيت -->
+    <script src="js/app.js"></script>
 </body>
 </html>

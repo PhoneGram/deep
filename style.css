@@ -1,32 +1,76 @@
+/* ===== الإعدادات العامة ===== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --primary: #1a472a;
+    --primary-light: #2D7D46;
+    --primary-dark: #0f2e1c;
+    --primary-gradient: linear-gradient(135deg, #1a472a 0%, #2D7D46 50%, #3a9b5a 100%);
+    --secondary: #f5f5f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --text-light: #fff;
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #ffc107;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --border-radius: 16px;
+    --border-radius-sm: 10px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== الوضع الداكن ===== */
+[data-theme="dark"] {
+    --primary: #1a472a;
+    --primary-light: #2D7D46;
+    --primary-dark: #0f2e1c;
+    --secondary: #1a1a1a;
+    --text-primary: #f5f5f5;
+    --text-secondary: #aaa;
+    --text-light: #fff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 body {
-    background: linear-gradient(135deg, #1a472a 0%, #2D7D46 50%, #3a9b5a 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--secondary);
+    color: var(--text-primary);
     min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* ===== صفحة التثبيت ===== */
+.install-page {
+    min-height: 100vh;
+    background: var(--primary-gradient);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
 }
 
-.install-page {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.logo-container {
+.install-container {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 30px;
-    padding: 50px 30px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 50px 35px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     animation: fadeInUp 0.8s ease-out;
+}
+
+[data-theme="dark"] .install-container {
+    background: rgba(30, 30, 30, 0.95);
 }
 
 @keyframes fadeInUp {
@@ -40,60 +84,564 @@ body {
     }
 }
 
-.logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #2D7D46;
-    padding: 20px;
+.logo-wrapper {
     margin-bottom: 20px;
-    box-shadow: 0 8px 25px rgba(45, 125, 70, 0.3);
 }
 
-.app-name {
-    font-size: 48px;
-    font-weight: 700;
-    color: #1a472a;
-    margin-bottom: 30px;
+.main-logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(26, 71, 42, 0.3);
+    transition: transform 0.3s;
+}
+
+.main-logo:hover {
+    transform: scale(1.05);
+}
+
+.app-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
     letter-spacing: 2px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+[data-theme="dark"] .app-title {
+    color: #fff;
+}
+
+.app-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+
 .install-btn {
-    background: linear-gradient(135deg, #2D7D46, #1a472a);
+    background: var(--primary-gradient);
     color: white;
     border: none;
-    padding: 18px 50px;
+    padding: 18px 40px;
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(45, 125, 70, 0.4);
+    transition: var(--transition);
+    box-shadow: 0 8px 25px rgba(26, 71, 42, 0.4);
     width: 100%;
-    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
 .install-btn:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 35px rgba(45, 125, 70, 0.5);
-    background: linear-gradient(135deg, #3a9b5a, #2D7D46);
+    box-shadow: 0 12px 35px rgba(26, 71, 42, 0.5);
 }
 
 .install-btn:active {
     transform: scale(0.95);
 }
 
-@media (max-width: 480px) {
-    .logo {
+.btn-icon {
+    font-size: 28px;
+}
+
+.browser-support {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* ===== الهيدر العلوي ===== */
+.app-header {
+    background: var(--primary-gradient);
+    padding: 15px 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== النافبار السفلي ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--primary-gradient);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0 12px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    border-radius: 20px 20px 0 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 12px;
+    transition: var(--transition);
+    position: relative;
+    min-width: 50px;
+    border: none;
+    background: transparent;
+}
+
+.nav-item img {
+    width: 30px;
+    height: 30px;
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+    transition: var(--transition);
+}
+
+.nav-item.active img {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background: white;
+    border-radius: 10px;
+}
+
+.nav-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: var(--transition);
+}
+
+.nav-item.active .nav-label {
+    color: white;
+    font-weight: 600;
+}
+
+/* ===== الأزرار العامة ===== */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(26, 71, 42, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(26, 71, 42, 0.4);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-light);
+    color: var(--primary-light);
+}
+
+.btn-outline:hover {
+    background: var(--primary-light);
+    color: white;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-lg {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* ===== البطاقات ===== */
+.card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+[data-theme="dark"] .card {
+    background: #2a2a2a;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* ===== الحقول ===== */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    transition: var(--transition);
+    background: white;
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-control {
+    background: #333;
+    border-color: #555;
+    color: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(45, 125, 70, 0.2);
+}
+
+/* ===== النوافذ المنبثقة ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+    position: relative;
+}
+
+[data-theme="dark"] .modal-content {
+    background: #2a2a2a;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* ===== القوائم ===== */
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+[data-theme="dark"] .list-item {
+    background: #333;
+}
+
+.list-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
+}
+
+.list-item .left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.list-item .right {
+    text-align: left;
+}
+
+/* ===== الألوان ===== */
+.text-danger {
+    color: var(--danger);
+}
+.text-success {
+    color: var(--success);
+}
+.text-primary {
+    color: var(--primary-light);
+}
+.text-muted {
+    color: var(--text-secondary);
+}
+
+.bg-danger {
+    background: var(--danger);
+    color: white;
+}
+.bg-success {
+    background: var(--success);
+    color: white;
+}
+.bg-primary {
+    background: var(--primary-light);
+    color: white;
+}
+
+/* ===== الأدوات المساعدة ===== */
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+
+.p-10 { padding: 10px; }
+.p-20 { padding: 20px; }
+.p-30 { padding: 30px; }
+
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-column { display: flex; flex-direction: column; }
+.gap-10 { gap: 10px; }
+.gap-20 { gap: 20px; }
+
+/* ===== التجاوب ===== */
+@media (max-width: 768px) {
+    .install-container {
+        padding: 30px 20px;
+    }
+    
+    .app-title {
+        font-size: 40px;
+    }
+    
+    .main-logo {
         width: 100px;
         height: 100px;
     }
-    .app-name {
-        font-size: 36px;
-    }
+    
     .install-btn {
         font-size: 18px;
         padding: 15px 30px;
     }
+    
+    .bottom-nav {
+        padding: 6px 0 10px;
+    }
+    
+    .nav-item {
+        padding: 2px 8px;
+        min-width: 40px;
+    }
+    
+    .nav-item img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .nav-label {
+        font-size: 9px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+/* ===== التمرير ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* ===== الإشعارات ===== */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--border-radius-sm);
+    z-index: 3000;
+    animation: slideUp 0.3s ease-out;
+    box-shadow: var(--shadow-hover);
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast-success {
+    background: var(--success);
+}
+.toast-error {
+    background: var(--danger);
+}
+.toast-warning {
+    background: var(--warning);
+    color: #333;
 }
